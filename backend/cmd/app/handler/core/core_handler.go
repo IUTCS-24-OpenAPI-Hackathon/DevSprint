@@ -8,6 +8,7 @@ import (
 
 type SpecificCong struct {
 	MapBoxPublicKey string
+	WeatherApiKey   string
 }
 
 type ApiHandler struct {
@@ -25,5 +26,6 @@ func (r *ApiHandler) SetupRoutes(route *fiber.Router) {
 
 	base.Get("/ping", r.Ping)
 	base.Get("/location-name", r.fetch_location_name)
+	base.Get("/place-data", r.fetch_place_data)
 
 }
