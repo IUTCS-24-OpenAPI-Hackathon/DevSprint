@@ -1,0 +1,14 @@
+{
+  "settings": "Settings",
+  "appName": "Aurora X",
+  "clear": "Clear",
+  "language": "Language",
+  "theme": "Theme",
+  "colorTheme": "Color Theme",
+  "font": "Font",
+  "cache": "Cache",
+  "clearCache": "Clear Cache",
+  "reset": "Reset",
+  "resetAll": "Reset All",
+  "appearance": "Appearance"
+}
