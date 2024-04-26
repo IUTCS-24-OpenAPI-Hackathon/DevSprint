@@ -15,7 +15,7 @@ class LocationRepository {
       if (!v) {
         return LocationState.fromError(LocationStateError.serviceDisabled);
       }
-
+      
       bool k = await Geolocator.isLocationServiceEnabled();
 
       if (!k) {

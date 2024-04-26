@@ -35,7 +35,8 @@ dependencies:
   provider: ^6.1.2
   loading_animation_widget: ^1.2.1
   dio: ^5.4.3+1
-
+  # geocoding: ^3.0.0
+  geocode: ^1.0.3
 
   
 dev_dependencies:
