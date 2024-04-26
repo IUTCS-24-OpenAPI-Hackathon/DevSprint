@@ -28,5 +28,8 @@ func (r *ApiHandler) SetupRoutes(route *fiber.Router) {
 	// base.Get("/location-name", r.fetch_location_name)
 	base.Get("/fetch-by-radius", r.fetch_place_by_radious)
 	base.Get("/fetch-by-others", r.fetch_by_others)
+	base.Post("/add-location", r.add_new_location)
+	base.Post("/add-review", r.add_comment)
+	base.Post("/add-experience", r.add_experience)
 
 }

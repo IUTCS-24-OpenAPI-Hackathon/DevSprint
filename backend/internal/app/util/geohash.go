@@ -3,7 +3,7 @@ package util
 import "github.com/pierrre/geohash"
 
 const (
-	DefaultGeoHashPrecision = 12
+	DefaultGeoHashPrecision = 9 //≤ 4.77m X 4.77m
 )
 
 func GeoHashEncode(lat, lon float64, precision ...int) string {

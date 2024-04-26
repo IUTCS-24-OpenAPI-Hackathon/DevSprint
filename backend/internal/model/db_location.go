@@ -3,6 +3,7 @@ package model
 import (
 	"math"
 
+	"github.com/google/uuid"
 	"github.com/monzim/go_starter/internal/app/util"
 	"gorm.io/gorm"
 )
@@ -22,11 +23,28 @@ type GeoLocation struct {
 	TimeCommon
 }
 
+func (u *GeoLocation) BeforeCreate(tx *gorm.DB) (err error) {
+	if u.GeoHash == "" {
+		u.GeoHash = util.GeoHashEncode(u.Latitude, u.Longitude)
+	}
+
+	return
+}
+
 type GeoLocationReview struct {
 	ID      string `json:"id" gorm:"primaryKey"`
+	Rating  int    `json:"rating,omitempty"`
 	Review  string `json:"review,omitempty"`
 	GeoHash string `json:"geo_hash,omitempty" gorm:"index"`
 	TimeCommon
+}
+
+func (u *GeoLocationReview) BeforeCreate(tx *gorm.DB) (err error) {
+	if u.ID == "" {
+		u.ID = uuid.New().String()
+	}
+
+	return
 }
 
 type GeoTravelExperience struct {
@@ -36,9 +54,9 @@ type GeoTravelExperience struct {
 	TimeCommon
 }
 
-func (u *GeoLocation) BeforeCreate(tx *gorm.DB) (err error) {
-	if u.GeoHash == "" {
-		u.GeoHash = util.GeoHashEncode(u.Latitude, u.Longitude)
+func (u *GeoTravelExperience) BeforeCreate(tx *gorm.DB) (err error) {
+	if u.ID == "" {
+		u.ID = uuid.New().String()
 	}
 
 	return

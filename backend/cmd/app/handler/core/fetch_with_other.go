@@ -33,7 +33,7 @@ func (r *ApiHandler) fetch_by_others(c *fiber.Ctx) error {
 		return sendResponse(c, Error, err.Error())
 	}
 
-	data, err := r.repo.GetLocationInfoByLocationName(body.SearchLocationName)
+	data, err := r.repo.GetLocationsInfoByLocationName(body.SearchLocationName)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to get location info by name")
 		return sendResponse(c, Error, err.Error())

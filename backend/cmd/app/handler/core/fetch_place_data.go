@@ -107,7 +107,7 @@ func (r *ApiHandler) fetch_place_by_radious(c *fiber.Ctx) error {
 		return sendResponse(c, Error, err.Error())
 	}
 
-	db_features, err := r.repo.GetLocationInfoByRadius(body.Latitude, body.Longitude, body.Radius, _limit)
+	db_features, err := r.repo.GetLocationsInfoByRadius(body.Latitude, body.Longitude, body.Radius, _limit)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to get location info by radius")
 	}

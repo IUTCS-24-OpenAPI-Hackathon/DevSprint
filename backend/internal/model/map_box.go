@@ -48,6 +48,9 @@ type Feature struct {
 		PoiCategoryIds []string `json:"poi_category_ids,omitempty"`
 	} `json:"properties,omitempty"`
 	Type string `json:"type,omitempty"`
+
+	Reviews     []GeoLocationReview   `json:"reviews,omitempty"`
+	Experiences []GeoTravelExperience `json:"experiences,omitempty"`
 }
 
 type MapBoxFeaturesRes struct {
