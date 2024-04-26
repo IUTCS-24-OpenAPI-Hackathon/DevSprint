@@ -1,7 +1,10 @@
+import 'package:devsprint/services/api/category_selection/api_services.dart';
 import 'package:devsprint/services/location/location.dart';
 import 'package:devsprint/services/location/location_state.dart';
 import 'package:devsprint/theme/app_theme.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LocationDataView extends StatefulWidget {
   LocationDataView({super.key, required this.category});
@@ -14,7 +17,6 @@ class LocationDataView extends StatefulWidget {
 
 class _LocationDataViewState extends State<LocationDataView> {
   LocationState? _locationState;
-  
 
   @override
   void initState() {
@@ -41,8 +43,10 @@ class _LocationDataViewState extends State<LocationDataView> {
     );
   }
 
-  _buildBody(){
-    return Column();
+  _buildBody() {
+    return Column(
+      children: [],
+    );
   }
 
   _buildChooseLocation() {
@@ -50,7 +54,36 @@ class _LocationDataViewState extends State<LocationDataView> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ElevatedButton(onPressed: () {}, child: Text("Your Location")),
+        ElevatedButton(
+            onPressed: () async {
+              if (_locationState != null) {
+                Response _response = await searchAttractionPlaces(
+                  category: widget.category,
+                  long: _locationState!.position!.longitude.toString(),
+                  lat: _locationState!.position!.latitude.toString(),
+                );
+
+                debugPrint(_response.data.toString());
+              }
+              {
+                LocationState state = await LocationRepository().getLocation();
+                setState(() {
+                  _locationState = state;
+                });
+                if (state.position == null) {
+                  Fluttertoast.showToast(msg: "Location not found");
+                } else {
+                  Response _response = await searchAttractionPlaces(
+                    category: widget.category,
+                    long: state.position!.longitude.toString(),
+                    lat: state.position!.latitude.toString(),
+                  );
+
+                  debugPrint(_response.data.toString());
+                }
+              }
+            },
+            child: Text("Your Location")),
         ElevatedButton(onPressed: () {}, child: Text("Custom Location")),
       ],
     );
