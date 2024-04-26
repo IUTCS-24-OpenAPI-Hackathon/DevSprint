@@ -1,3 +1,5 @@
+import 'package:devsprint/src/services/location/location_repo.dart';
+import 'package:devsprint/src/services/location/models/locatin_state_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,43 +35,17 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: ref.read(countProvider.notifier).increment,
-        child: const IIcon(
-          FontAwesomeIcons.plus,
-          fontAwesome: true,
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircleAvatar(
-              backgroundColor: colors.$1,
-              minRadius: 160,
-              child: Animate(
-                effects: const [FadeEffect(), ScaleEffect()],
-                key: ValueKey(count),
-                child: Text(
-                  '$count',
-                  style: context.textTheme.headlineMedium?.copyWith(
-                    fontSize: 100,
-                    color: colors.$2,
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      Shadow(
-                        color: context.colorScheme.secondary,
-                        offset: const Offset(2, 2),
-                        blurRadius: 2,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+        body: Center(
+        child: ElevatedButton(
+          onPressed: () async{
+            LocationState _locationState = await  LocationRepository().getLocation();
+
+            debugPrint(_locationState.toString());
+
+          },
+          child: Text("Get Location"),)
+        
+         ),
     );
   }
 }
