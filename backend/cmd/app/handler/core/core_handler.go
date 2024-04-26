@@ -25,7 +25,8 @@ func (r *ApiHandler) SetupRoutes(route *fiber.Router) {
 	base := (*route).Group("/")
 
 	base.Get("/ping", r.Ping)
-	base.Get("/location-name", r.fetch_location_name)
-	base.Get("/place-data", r.fetch_place_data)
+	// base.Get("/location-name", r.fetch_location_name)
+	base.Get("/fetch-by-radius", r.fetch_place_by_radious)
+	base.Get("/fetch-by-others", r.fetch_by_others)
 
 }

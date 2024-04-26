@@ -13,8 +13,9 @@ type GeoLocation struct {
 	GeoHash     string                `json:"geo_hash" gorm:"primaryKey"`
 	Latitude    float64               `json:"latitude,omitempty"`
 	Longitude   float64               `json:"longitude,omitempty"`
-	PlaceName   string                `json:"place_name,omitempty"`
-	Country     string                `json:"country,omitempty"`
+	PlaceName   string                `json:"place_name,omitempty" gorm:"index"`
+	Country     string                `json:"country,omitempty" gorm:"index"`
+	Distance    float64               `json:"distance,omitempty"`
 	RawData     []byte                `json:"raw_data,omitempty"`
 	Reviews     []GeoLocationReview   `gorm:"foreignKey:GeoHash"`
 	Experiences []GeoTravelExperience `gorm:"foreignKey:GeoHash"`
