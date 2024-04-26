@@ -54,7 +54,7 @@ class _HomeViewState extends State<HomeView> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return LocationDataView(
-                      category: model!.listItems![index].name!,
+                      canonicalId: model!.listItems![index].canonicalId!,
                     );
                   }));
                 
