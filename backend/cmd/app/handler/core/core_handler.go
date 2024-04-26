@@ -6,19 +6,24 @@ import (
 	core_repo "github.com/monzim/go_starter/internal/repository/core"
 )
 
+type SpecificCong struct {
+	MapBoxPublicKey string
+}
+
 type ApiHandler struct {
 	hdlr *handler.Handler
 	repo *core_repo.CoreRepository
+	conf *SpecificCong
 }
 
-func NewApiHandler(handlr *handler.Handler, repo *core_repo.CoreRepository) ApiHandler {
-	return ApiHandler{hdlr: handlr, repo: repo}
+func NewApiHandler(handlr *handler.Handler, repo *core_repo.CoreRepository, conf *SpecificCong) ApiHandler {
+	return ApiHandler{hdlr: handlr, repo: repo, conf: conf}
 }
 
 func (r *ApiHandler) SetupRoutes(route *fiber.Router) {
 	base := (*route).Group("/")
 
 	base.Get("/ping", r.Ping)
-	base.Get("/geo-hash", r.geo_hash)
+	base.Get("/location-name", r.fetch_location_name)
 
 }

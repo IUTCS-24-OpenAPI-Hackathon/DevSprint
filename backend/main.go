@@ -129,7 +129,10 @@ func main() {
 	handlr := handler.CreateHandler(validate)
 	coreRepo := core_repo.NewCoreRepository(postgres)
 
-	apiHandler := core_handler.NewApiHandler(&handlr, coreRepo)
+	var conf core_handler.SpecificCong
+
+	conf.MapBoxPublicKey = os.Getenv("MAPBOX_PUBLIC_KEY")
+	apiHandler := core_handler.NewApiHandler(&handlr, coreRepo, &conf)
 	apiHandler.SetupRoutes(&v1)
 
 	printRoutes(app)
