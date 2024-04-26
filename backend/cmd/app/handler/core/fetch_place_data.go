@@ -60,24 +60,41 @@ func (r *ApiHandler) fetch_place_data(c *fiber.Ctx) error {
 		return sendResponse(c, Error, "Error while unmarshalling response")
 	}
 
-	for i := range res.Features {
-		res.Features[i].ID = fmt.Sprintf("%d", i)
-	}
+	// // convert the features to a jsonstring
+	// features, err := json.Marshal(res.Features)
+	// if err != nil {
+	// 	log.Error().Err(err).Msg("failed to marshal features")
+	// }
 
+	// get the location hospital, atm, hospital also
+
+	// save the data to db
 	var wg sync.WaitGroup
 	for i := range res.Features {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			weatherRes, err := r.getWeatherInfo(res.Features[i].Geometry.Coordinates[1], res.Features[i].Geometry.Coordinates[0])
-			if err != nil {
-				log.Error().Err(err).Msg("failed to get weather info")
-			} else {
-				res.Features[i].Weather = *weatherRes
+			if err := r.repo.SaveGeoLocation(res.Features[i]); err != nil {
+				log.Error().Err(err).Msg("failed to save geo location")
 			}
 		}(i)
 	}
-	wg.Wait()
+
+	// get the location data based on the coordinates rounded
+
+	// for i := range res.Features {
+	// 	wg.Add(1)
+	// 	go func(i int) {
+	// 		defer wg.Done()
+	// 		weatherRes, err := r.getWeatherInfo(res.Features[i].Properties.Coordinates.Latitude, res.Features[i].Properties.Coordinates.Longitude)
+	// 		if err != nil {
+	// 			log.Error().Err(err).Msg("failed to get weather info")
+	// 		} else {
+	// 			res.Features[i].Weather = *weatherRes
+	// 		}
+	// 	}(i)
+	// }
+	// wg.Wait()
 
 	return sendResponse(c, Success, res.Features)
 
