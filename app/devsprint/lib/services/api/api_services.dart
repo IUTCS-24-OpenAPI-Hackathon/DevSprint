@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -61,3 +59,27 @@ Future<Response?> searchAttractionPlaces(
   }
 
 }
+
+
+
+Future<Response?> searchByOthers({required String locationName, required String long, required String lat}) async {
+  final dio = Dio();
+
+  try {
+    final response = await dio
+        .get('https://devsprint-iut.whitedesert-62c03125.australiaeast.azurecontainerapps.io/api/v1/fetch-by-others/', data: {
+          "limit": 1,
+          "radious_km": 90,
+          "search_location_name": locationName,
+          "longitude": long,
+          "latitude": lat
+    });
+    debugPrint(response.data.toString());
+    return response;
+  } catch (error) {
+    debugPrint(error.toString());
+  }
+
+}
+
+

@@ -1,4 +1,4 @@
-import 'package:devsprint/presentation/home/home_provider.dart';
+import 'package:devsprint/presentation/stage_one/home_provider.dart';
 import 'package:devsprint/presentation/home/views/home_view.dart';
 import 'package:devsprint/presentation/splash_view.dart';
 import 'package:flutter/material.dart';

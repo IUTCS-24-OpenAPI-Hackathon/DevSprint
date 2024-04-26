@@ -37,6 +37,8 @@ dependencies:
   dio: ^5.4.3+1
   # geocoding: ^3.0.0
   geocode: ^1.0.3
+  google_maps_flutter: ^2.6.1
+  geocoding: ^3.0.0
 
   
 dev_dependencies:

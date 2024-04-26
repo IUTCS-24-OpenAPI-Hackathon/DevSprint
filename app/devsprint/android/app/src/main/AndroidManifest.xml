@@ -17,6 +17,13 @@
         android:label="devsprint"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        
+        <!-- Google Map API -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyBKivueJv_YehqxAwpsrOcMzGGKPS15grE"/>
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
