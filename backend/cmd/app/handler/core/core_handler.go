@@ -8,6 +8,7 @@ import (
 
 type SpecificCong struct {
 	MapBoxPublicKey string
+	WeatherApiKey   string
 }
 
 type ApiHandler struct {

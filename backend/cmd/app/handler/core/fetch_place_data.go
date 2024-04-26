@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"sync"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/monzim/go_starter/internal/model"
@@ -12,8 +13,8 @@ import (
 )
 
 type place_data_request struct {
+	Limit     int     `json:"limit"`
 	Category  string  `json:"canonical_id" validate:"required"`
-	Radios    int     `json:"radios" validate:"required"`
 	Longitude float64 `json:"longitude" validate:"required"`
 	Latitude  float64 `json:"latitude" validate:"required"`
 }
@@ -25,9 +26,16 @@ func (r *ApiHandler) fetch_place_data(c *fiber.Ctx) error {
 		return sendResponse(c, Error, er.Error())
 	}
 
+	var _limit int
+	if body.Limit == 0 {
+		_limit = 5
+	} else {
+		_limit = body.Limit
+	}
+
 	// maxLat, maxLong := util.MaxLatLngInRadius(body.Latitude, body.Longitude, float64(body.Radios))
 
-	resp, err := http.Get(fmt.Sprintf("https://api.mapbox.com/search/searchbox/v1/category/%s?access_token=%s&language=en&limit=15&proximity=%f,%f&", body.Category, r.conf.MapBoxPublicKey, body.Longitude, body.Latitude))
+	resp, err := http.Get(fmt.Sprintf("https://api.mapbox.com/search/searchbox/v1/category/%s?access_token=%s&language=en&limit=%d&proximity=%f,%f&", body.Category, r.conf.MapBoxPublicKey, _limit, body.Longitude, body.Latitude))
 	if err != nil {
 		log.Error().Err(err).Msg("failed to send request to map box")
 		return sendResponse(c, Error, "failed to send request to map box")
@@ -56,7 +64,20 @@ func (r *ApiHandler) fetch_place_data(c *fiber.Ctx) error {
 		res.Features[i].ID = fmt.Sprintf("%d", i)
 	}
 
-	// get the weather info about the places
+	var wg sync.WaitGroup
+	for i := range res.Features {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			weatherRes, err := r.getWeatherInfo(res.Features[i].Geometry.Coordinates[1], res.Features[i].Geometry.Coordinates[0])
+			if err != nil {
+				log.Error().Err(err).Msg("failed to get weather info")
+			} else {
+				res.Features[i].Weather = *weatherRes
+			}
+		}(i)
+	}
+	wg.Wait()
 
 	return sendResponse(c, Success, res.Features)
 

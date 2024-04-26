@@ -3,7 +3,8 @@ package model
 type MapBoxFeaturesRes struct {
 	Attribution string `json:"attribution,omitempty"`
 	Features    []struct {
-		ID       string `json:"_id,omitempty"`
+		ID       string     `json:"_id,omitempty"`
+		Weather  WeatherRes `json:"weather,omitempty"`
 		Geometry struct {
 			Coordinates []float64 `json:"coordinates,omitempty"`
 			Type        string    `json:"type,omitempty"`

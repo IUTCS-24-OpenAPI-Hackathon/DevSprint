@@ -132,6 +132,7 @@ func main() {
 	var conf core_handler.SpecificCong
 
 	conf.MapBoxPublicKey = os.Getenv("MAPBOX_PUBLIC_KEY")
+	conf.WeatherApiKey = os.Getenv("WEATHER_API_KEY")
 	apiHandler := core_handler.NewApiHandler(&handlr, coreRepo, &conf)
 	apiHandler.SetupRoutes(&v1)
 
