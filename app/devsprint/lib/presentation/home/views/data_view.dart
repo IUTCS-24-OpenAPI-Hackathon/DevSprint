@@ -1,4 +1,4 @@
-import 'package:devsprint/services/api/category_selection/api_services.dart';
+import 'package:devsprint/services/api/api_services.dart';
 import 'package:devsprint/services/location/location.dart';
 import 'package:devsprint/services/location/location_state.dart';
 import 'package:devsprint/theme/app_theme.dart';
