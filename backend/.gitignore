@@ -1,0 +1,32 @@
+# Dependency directories
+vendor/
+
+tmp/*
+*tmp/
+tmp/main
+tmp/build-errors.log
+
+server/tmp/
+# ignore .DS_Store files
+*.DS_Store
+.DS_Store
+bin/*
+build/bin/*
+build/bin/
+*.bin
+temp/*
+*temp/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*tmp/
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+.env
+firebase-admin.json
+.env.local
