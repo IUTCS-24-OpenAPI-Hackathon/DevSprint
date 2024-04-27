@@ -1,3 +1,4 @@
+import 'package:devsprint/presentation/stage_two/models/properties_model.dart';
 import 'package:devsprint/presentation/stage_two/models/search_by_others_model.dart';
 import 'package:devsprint/presentation/stage_two/views/map_view.dart';
 import 'package:devsprint/services/api/api_services.dart';
@@ -22,7 +23,7 @@ class _StageTwoViewState extends State<StageTwoView> {
   LocationState? _userLocation;
   List<String> _suggestions = [];
 
-  SearchByOthersModel? _model;
+  List<Coordinates>? _coordinates;
   bool isLoading = false;
 
 
@@ -66,14 +67,13 @@ Response? response;
         title: Text("Location Search"),
       ),
       body: Padding(
-        padding: _model == null? EdgeInsets.all(20.w): EdgeInsets.all(0),
+        padding: _coordinates == null? EdgeInsets.all(20.w): EdgeInsets.all(0),
         child: 
-        _model == null
+        _coordinates == null
           ? _buildGetDetails()
           : MapView(
-            name: _model!.data[0].weather.location.name,
-            lat: _model!.data[0].weather.location.lat,
-            long: _model!.data[0].weather.location.lon,
+            name: _locationController.text,
+            codList: _coordinates!,
             
           ),
              ),
@@ -96,11 +96,21 @@ _buildGetDetails(){
 
               updateIsLoading();
               Response? _response = await searchByOthers(locationName: _locationController.text, lat: _userLocation!.position!.latitude, long: _userLocation!.position!.longitude);             
-              SearchByOthersModel _model = SearchByOthersModel.fromJson(_response!.data);
+              // SearchByOthersModel _model = SearchByOthersModel.fromJson(_response!.data);
+                
+
+                List<Coordinates> cod = [];
+
+
+                for(int i=0; i< _response!.data['data'][0]['properties'].length; i++){
+                  Coordinates _cod = propertiesModel.fromJson( _response!.data['data'][0]['properties']).coordinates;
+                  cod.add(_cod);
+                }
+
+                
 
               setState(() {
-                response = _response;
-                this._model = _model;
+                _coordinates = cod;
               });
 
               updateIsLoading();  

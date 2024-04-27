@@ -81,7 +81,7 @@ Future<Response?> searchByOthers({required String locationName, required double 
           "latitude": lat
     });
      
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     debugPrint("\n\n\n");
 
     return response;
