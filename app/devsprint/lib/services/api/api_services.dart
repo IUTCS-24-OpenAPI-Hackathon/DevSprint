@@ -80,8 +80,7 @@ Future<Response?> searchByOthers({required String locationName, required double 
           "longitude": long,
           "latitude": lat
     });
-    
-        debugPrint("\n\n\n");
+     
     debugPrint(response.toString());
     debugPrint("\n\n\n");
 
