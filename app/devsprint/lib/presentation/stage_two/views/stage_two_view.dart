@@ -1,4 +1,9 @@
+import 'package:devsprint/services/api/api_services.dart';
+import 'package:devsprint/services/location/location.dart';
+import 'package:devsprint/services/location/location_state.dart';
+import 'package:devsprint/theme/app_theme.dart';
 import 'package:devsprint/widgets/build_btn.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,7 +15,8 @@ class StageTwoView extends StatefulWidget {
 }
 
 class _StageTwoViewState extends State<StageTwoView> {
-  final TextEditingController _locationController = TextEditingController();
+  final _locationController = TextEditingController();
+  LocationState? _userLocation;
   List<String> _suggestions = [];
 
   @override
@@ -25,7 +31,19 @@ class _StageTwoViewState extends State<StageTwoView> {
       "Paris, France",
       "Berlin, Germany",
     ];
+
+    _getLocation();
   }
+
+
+  _getLocation()async{
+      LocationState _state = await LocationRepository().getLocation();
+      setState(() {
+        _userLocation = _state;
+      });
+  }
+
+Response? response;
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +56,18 @@ class _StageTwoViewState extends State<StageTwoView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
         children: [
+
+          // Text("Response: "+response.toString(), style: textThemeCustom.labelLarge),
           _buildTextField(),
           SizedBox(height: 20.h),
-          BuildBtn(title: "Search", height: 45.h, width: double.maxFinite)
+          BuildBtn(
+            onPressed: () async{
+              Response? _response = await searchByOthers(locationName: _locationController.text, lat: _userLocation!.position!.latitude, long: _userLocation!.position!.longitude);             
+              setState(() {
+                response = _response;
+              });
+            },
+            title: "Search", height: 45.h, width: double.maxFinite)
         ],
             ),
       ),
@@ -50,6 +77,7 @@ class _StageTwoViewState extends State<StageTwoView> {
 
   _buildTextField() {
     return  Autocomplete<String>(
+    
   fieldViewBuilder: (context, controller, focusNode, onSubmitted) =>
     TextField(
       controller: controller,
@@ -59,7 +87,9 @@ class _StageTwoViewState extends State<StageTwoView> {
         labelText: "Search Location",
         border: OutlineInputBorder(),
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        _locationController.text = value;
+      },
     ),
   optionsBuilder: (TextEditingValue textEditingValue) {
     if (textEditingValue.text.isEmpty) {

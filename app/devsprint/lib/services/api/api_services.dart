@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 // Assuming you have a Dio instance
@@ -62,10 +63,15 @@ Future<Response?> searchAttractionPlaces(
 
 
 
-Future<Response?> searchByOthers({required String locationName, required String long, required String lat}) async {
+Future<Response?> searchByOthers({required String locationName, required double long, required double lat}) async {
   final dio = Dio();
 
+
   try {
+    // final latLong = await getLatLongFromAddress(address: locationName);
+
+    // debugPrint(latLong.toString());
+
     final response = await dio
         .get('https://devsprint-iut.whitedesert-62c03125.australiaeast.azurecontainerapps.io/api/v1/fetch-by-others/', data: {
           "limit": 1,
@@ -74,12 +80,49 @@ Future<Response?> searchByOthers({required String locationName, required String 
           "longitude": long,
           "latitude": lat
     });
-    debugPrint(response.data.toString());
+    
+        debugPrint("\n\n\n");
+    debugPrint(response.toString());
+    debugPrint("\n\n\n");
+
     return response;
   } catch (error) {
     debugPrint(error.toString());
   }
 
 }
+
+
+Future<Map?> getLatLongFromAddress({required String address}) async {
+
+  final dio = Dio();
+
+  try {
+     // API endpoint
+      String url = 'https://geocode.maps.co/search?q=${address.toString()}&api_key=65dc1f5e2a4ec260001640ome36909c';
+      
+      // Make GET request
+      Response response = await dio.get(url);
+
+      // debugPrint(response.data.toString());
+
+    if (response.statusCode == 200) {
+      final data = response.data;
+
+      // print(data);
+      return {'lat': data[0]['lat'], 'long': data[0]['lon']};
+    } else {
+      // Handle API errors
+      print('API request failed with status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Handle exceptions
+    print('Exception occurred: $e');
+  }
+
+
+
+}
+
 
 
