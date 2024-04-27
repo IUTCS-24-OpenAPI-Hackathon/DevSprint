@@ -1,11 +1,11 @@
-class UserLocationResultModel {
+class SearchByOthersModel {
   List<Data> data;
   String status;
 
-  UserLocationResultModel({required this.data, required this.status});
+  SearchByOthersModel({required this.data, required this.status});
 
-  factory UserLocationResultModel.fromJson(Map<String, dynamic> json) {
-    return UserLocationResultModel(
+  factory SearchByOthersModel.fromJson(Map<String, dynamic> json) {
+    return SearchByOthersModel(
       data: (json['data'] as List).map((e) => Data.fromJson(e)).toList(),
       status: json['status'],
     );
@@ -14,18 +14,18 @@ class UserLocationResultModel {
 
 class Data {
   Weather weather;
-  Geometry geometry;
+
   Properties properties;
   String type;
 
-  Data({required this.weather, required this.geometry, required this.properties, required this.type});
+  Data({required this.weather,  required this.properties, required this.type});
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
       weather: Weather.fromJson(json['weather']),
-      geometry: Geometry.fromJson(json['geometry']),
+      // geometry: Geometry.fromJson(json['geometry']),
       properties: Properties.fromJson(json['properties']),
-      type: json['type'],
+      type: json['type']??"",
     );
   }
 }
@@ -210,19 +210,19 @@ class AirQuality {
   }
 }
 
-class Geometry {
-  List<double> coordinates;
-  String type;
+// class Geometry {
+//   List<double> coordinates;
+//   String type;
 
-  Geometry({required this.coordinates, required this.type});
+//   Geometry({required this.coordinates, required this.type});
 
-  factory Geometry.fromJson(Map<String, dynamic> json) {
-    return Geometry(
-      coordinates: List<double>.from(json['coordinates'].map((x) => x.toDouble())),
-      type: json['type'],
-    );
-  }
-}
+//   factory Geometry.fromJson(Map<String, dynamic> json) {
+//     return Geometry(
+//       coordinates: List<double>.from(json['coordinates'].map((x) => x.toDouble())),
+//       type: json['type'],
+//     );
+//   }
+// }
 
 class Properties {
   String address;
@@ -237,8 +237,8 @@ class Properties {
   Map<String, dynamic> metadata;
   String name;
   String placeFormatted;
-  List<String> poiCategory;
-  List<String> poiCategoryIds;
+  List<String>? poiCategory;
+  List<String>? poiCategoryIds;
 
   Properties(
       {required this.address,
@@ -262,16 +262,16 @@ class Properties {
       context: Context.fromJson(json['context']),
       coordinates: Coordinates.fromJson(json['coordinates']),
       externalIds: ExternalIds.fromJson(json['external_ids']),
-      featureType: json['feature_type'],
+      featureType: json['feature_type']??"",
       fullAddress: json['full_address'],
-      language: json['language'],
-      maki: json['maki'],
-      mapboxId: json['mapbox_id'],
+      language: json['language']??"",
+      maki: json['maki'] ?? "",
+      mapboxId: json['mapbox_id']??"",
       metadata: json['metadata'],
       name: json['name'],
-      placeFormatted: json['place_formatted'],
-      poiCategory: List<String>.from(json['poi_category']),
-      poiCategoryIds: List<String>.from(json['poi_category_ids']),
+      placeFormatted: json['place_formatted']??"",
+      poiCategory: json['poi_category'] == null ? null : List<String>.from(json['poi_category']),
+      poiCategoryIds: json['poi_category_ids'] == null? null : List<String>.from(json['poi_category_ids']),
     );
   }
 }
@@ -294,30 +294,27 @@ class Context {
 
 class Country {
   String countryCode;
-  String countryCodeAlpha3;
   String name;
 
-  Country({required this.countryCode, required this.countryCodeAlpha3, required this.name});
+  Country({required this.countryCode, required this.name});
 
   factory Country.fromJson(Map<String, dynamic> json) {
     return Country(
       countryCode: json['country_code'],
-      countryCodeAlpha3: json['country_code_alpha_3'],
       name: json['name'],
     );
   }
 }
 
 class Place {
-  String id;
   String name;
 
-  Place({required this.id, required this.name});
+  Place({required this.name});
 
   factory Place.fromJson(Map<String, dynamic> json) {
     return Place(
-      id: json['id'],
-      name: json['name'],
+      // id: json['id'],
+      name: json['name']?? "",
     );
   }
 }
@@ -337,7 +334,7 @@ class Postcode {
 class Coordinates {
   double latitude;
   double longitude;
-  List<RoutablePoints> routablePoints;
+  List<RoutablePoints>? routablePoints;
 
   Coordinates({required this.latitude, required this.longitude, required this.routablePoints});
 
@@ -345,7 +342,7 @@ class Coordinates {
     return Coordinates(
       latitude: json['latitude'],
       longitude: json['longitude'],
-      routablePoints: List<RoutablePoints>.from(json['routable_points'].map((x) => RoutablePoints.fromJson(x))),
+      routablePoints: json['routable_points'] == null? null : List<RoutablePoints>.from(json['routable_points'].map((x) => RoutablePoints.fromJson(x))),
     );
   }
 }

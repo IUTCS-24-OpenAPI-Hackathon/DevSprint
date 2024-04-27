@@ -2,9 +2,10 @@ import 'package:devsprint/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class BuildBtn extends StatelessWidget {
-  BuildBtn({super.key, required this.title, this.textColor = Colors.white, this.color = Colors.black, this.iconPath, this.onPressed,  this.pageName, required this.height, required this.width});
+  BuildBtn({super.key, this.isLoading = false, required this.title, this.textColor = Colors.white, this.color = Colors.black, this.iconPath, this.onPressed,  this.pageName, required this.height, required this.width});
 
   Icon? iconPath;
   Widget? pageName;
@@ -14,6 +15,8 @@ class BuildBtn extends StatelessWidget {
   double height;
   double width;
   Function()? onPressed;
+
+  bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,11 @@ class BuildBtn extends StatelessWidget {
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(10.w), color: color),
         child: Center(
-          child: Text(title,style: textThemeCustom.labelLarge?.copyWith(color: textColor)),
+          child: 
+          isLoading
+          ? LoadingAnimationWidget.horizontalRotatingDots(color: textColor as Color, size: 24.sp)
+          : Text(title,style: textThemeCustom.labelLarge?.copyWith(color: textColor),
+          ),
       )),
     );
   }

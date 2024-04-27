@@ -1,3 +1,5 @@
+import 'package:devsprint/presentation/stage_two/models/search_by_others_model.dart';
+import 'package:devsprint/presentation/stage_two/views/map_view.dart';
 import 'package:devsprint/services/api/api_services.dart';
 import 'package:devsprint/services/location/location.dart';
 import 'package:devsprint/services/location/location_state.dart';
@@ -6,6 +8,7 @@ import 'package:devsprint/widgets/build_btn.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class StageTwoView extends StatefulWidget {
   const StageTwoView({Key? key}) : super(key: key);
@@ -18,6 +21,10 @@ class _StageTwoViewState extends State<StageTwoView> {
   final _locationController = TextEditingController();
   LocationState? _userLocation;
   List<String> _suggestions = [];
+
+  SearchByOthersModel? _model;
+  bool isLoading = false;
+
 
   @override
   void initState() {
@@ -33,6 +40,7 @@ class _StageTwoViewState extends State<StageTwoView> {
     ];
 
     _getLocation();
+
   }
 
 
@@ -41,6 +49,12 @@ class _StageTwoViewState extends State<StageTwoView> {
       setState(() {
         _userLocation = _state;
       });
+  }
+
+  updateIsLoading(){
+    setState(() {
+      isLoading = !isLoading;
+    });
   }
 
 Response? response;
@@ -52,8 +66,23 @@ Response? response;
         title: Text("Location Search"),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.w),
-        child: Column(
+        padding: _model == null? EdgeInsets.all(20.w): EdgeInsets.all(0),
+        child: 
+        _model == null
+          ? _buildGetDetails()
+          : MapView(
+            name: _model!.data[0].weather.location.name,
+            lat: _model!.data[0].weather.location.lat,
+            long: _model!.data[0].weather.location.lon,
+            
+          ),
+             ),
+ 
+    ); }
+
+
+_buildGetDetails(){ 
+  return Column(
           mainAxisAlignment: MainAxisAlignment.center,
         children: [
 
@@ -61,21 +90,31 @@ Response? response;
           _buildTextField(),
           SizedBox(height: 20.h),
           BuildBtn(
-            onPressed: () async{
+            onPressed: 
+            isLoading? (){}
+            : () async{
+
+              updateIsLoading();
               Response? _response = await searchByOthers(locationName: _locationController.text, lat: _userLocation!.position!.latitude, long: _userLocation!.position!.longitude);             
+              SearchByOthersModel _model = SearchByOthersModel.fromJson(_response!.data);
+
               setState(() {
                 response = _response;
+                this._model = _model;
               });
+
+              updateIsLoading();  
+
             },
+            isLoading: isLoading,
             title: "Search", height: 45.h, width: double.maxFinite)
         ],
-            ),
-      ),
- 
-    ); }
+            );
+}
 
 
-  _buildTextField() {
+
+_buildTextField() {
     return  Autocomplete<String>(
     
   fieldViewBuilder: (context, controller, focusNode, onSubmitted) =>

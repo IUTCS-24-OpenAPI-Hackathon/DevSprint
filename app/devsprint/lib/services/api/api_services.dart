@@ -47,7 +47,7 @@ Future<Response?> searchAttractionPlaces(
 
   try {
     final response = await dio
-        .get('https://devsprint-iut.whitedesert-62c03125.australiaeast.azurecontainerapps.io/api/v1/place-data/', data: {
+        .get('https://devsprint-iut.whitedesert-62c03125.australiaeast.azurecontainerapps.io/api/v1/fetch-by-radius/', data: {
       "radious_km": 10000,
       "canonical_id": "services",
       "longitude": -122.084,

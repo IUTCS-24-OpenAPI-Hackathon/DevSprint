@@ -89,7 +89,7 @@ class _LocationDataViewState extends State<LocationDataView> {
                       width: double.maxFinite,
                       child: Center(
                           child: Text(
-                              "Section: ${_locationResultModel!.data![index].id}",
+                              "Section: $index",
                               style: textThemeCustom.headlineMedium)),
                     ),
                     _buildLocationWidget(
@@ -138,19 +138,19 @@ class _LocationDataViewState extends State<LocationDataView> {
 
                 // debugPrint(_locationState!.position!.longitude.toString());
               } else {
-                // LocationState state = await LocationRepository().getLocation();
-                // setState(() {
-                //   _locationState = state;
-                // });
-                // if (state.position == null) {
-                //   Fluttertoast.showToast(msg: "Location not found");
-                // } else {
-                //   Response? _response = await searchAttractionPlaces(
-                //     canonicalId: widget.canonicalId,
-                //     long: state.position!.longitude.toString(),
-                //     lat: state.position!.latitude.toString(),
-                //   );
-                 // }
+                LocationState state = await LocationRepository().getLocation();
+                setState(() {
+                  _locationState = state;
+                });
+                if (state.position == null) {
+                  Fluttertoast.showToast(msg: "Location not found");
+                } else {
+                  Response? _response = await searchAttractionPlaces(
+                    canonicalId: widget.canonicalId,
+                    long: state.position!.longitude.toString(),
+                    lat: state.position!.latitude.toString(),
+                  );
+                 }
 
                   debugPrint("Location not found");
                
